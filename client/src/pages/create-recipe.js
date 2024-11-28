@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useGetUserID } from "../hooks/useGetUserID";
+// import { useGetUserID } from "../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import "./create-recipe.css"; // Adjust the path as needed
 
 export const CreateRecipe = () => {
-  const userID = useGetUserID();
-  const [cookies, _] = useCookies(["access_token"]);
+  // const userID = useGetUserID();
+  const [cookies] = useCookies(["access_token"]);
+
   const [recipe, setRecipe] = useState({
     name: "",
     description: "",
@@ -14,7 +16,6 @@ export const CreateRecipe = () => {
     instructions: "",
     imageUrl: "",
     cookingTime: 0,
-    userOwner: userID,
   });
 
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ export const CreateRecipe = () => {
         "http://localhost:3001/recipes",
         { ...recipe },
         {
-          headers: { authorization: cookies.access_token },
+          headers: { Authorization: `Bearer ${cookies.access_token}` },
         }
       );
 
@@ -56,7 +57,7 @@ export const CreateRecipe = () => {
 
   return (
     <div className="create-recipe">
-      <h2>Create Recipe</h2>
+      <h2 className="heading">Create Recipe</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Name</label>
         <input
